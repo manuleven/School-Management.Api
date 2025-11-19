@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>School_Management.Persistence</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\School-Management.Application\School-Management.Application.csproj" />
+    <ProjectReference Include="..\School-Management.Domain\School-Management.Domain.csproj" />
+    <ProjectReference Include="..\School-Management.Infrastructure\School-Management.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
