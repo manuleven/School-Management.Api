@@ -23,17 +23,17 @@ namespace School_Management.Application.Queries.Students.GetStudentById
             var studentDto = new StudentDto
             {
                 Id = student.Id,
-                FirstName = student.FirstName,
-                LastName = student.FullName.LastName,
+                FullName = student.FullName.GetFullName(),
+                
                 DateOfBirth = student.DateOfBirth,
                 PhoneNumber = student.PhoneNumber,
                 Address = student.Address,
                 State = student.State,
                 
-                DepartmentName = department.DepartmentName
+                Department = department.DepartmentName
             };
             return studentDto;
         }
-    {
+    
     }
 }

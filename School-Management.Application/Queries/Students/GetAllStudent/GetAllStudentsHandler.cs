@@ -35,6 +35,6 @@ namespace School_Management.Application.Queries.Students.GetAllStudent
             }
             return studentDtos;
         }
-    {
+    
     }
 }
