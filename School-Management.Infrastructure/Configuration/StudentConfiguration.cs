@@ -51,6 +51,13 @@ namespace School_Management.Infrastructure.Configuration
                 .HasForeignKey(s => s.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict); 
 
+            builder.HasOne(s => s.Classroom)
+                .WithMany(d => d.Students)
+                .HasForeignKey(s => s.ClassroomId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+
+
         }
     }
 }

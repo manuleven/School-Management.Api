@@ -22,6 +22,8 @@ namespace School_Management.Infrastructure.Configuration
             builder.Property(x => x.CreatedBy)
                 .HasMaxLength(100)
                 .IsRequired();
+
+            
         }
     }
 }

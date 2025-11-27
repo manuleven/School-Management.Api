@@ -31,7 +31,7 @@ namespace School_Management.Api.Controllers
         }
 
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("get-by-id{id:guid}")]
 
         public async Task<ActionResult<TeacherDto>> GetTeacherById(Guid id, CancellationToken cancellationToken)
         {
@@ -53,7 +53,7 @@ namespace School_Management.Api.Controllers
             var query = new GetAllTeachersQuery();
             var result = await mediator.Send(query, cancellationToken);
 
-            if (result.Count > 0)
+            if (result.Count()> 0)
             { 
 
                 return NotFound();

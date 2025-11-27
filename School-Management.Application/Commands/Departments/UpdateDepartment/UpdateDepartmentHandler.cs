@@ -13,6 +13,17 @@ namespace School_Management.Application.Commands.Departments.UpdateDepartment
             if (department == null)
                 throw new Exception("Department not found");
 
+            var check = await repository.Departments.GetByName(request.DepartmentName.ToLower(), cancellationToken);
+            if (check != null)
+            {
+
+                throw new Exception("Department already exists.");
+            }
+
+            department.UpdateDepartmentCode(request.DepartmentCode);
+            department.UpdateDepartmentName(request.DepartmentName);
+            
+
             await repository.Departments.UpdateAsync(department, cancellationToken);
              var result = await repository.SaveChangesAsync(cancellationToken) > 0;
             if (!result)

@@ -29,6 +29,9 @@ namespace SchoolManagement.Domain.Entities
         public string PhoneNumber { get; private set; } = default!;
 
         public Department Department { get; private set;} = default!;
+        public List<Classroom> Classrooms { get; private set; } = new();
+
+        public List<Subject> Subjects { get; private set; } = new();
 
         public Guid DepartmentId { get; private set; } = default!;
 
@@ -63,6 +66,15 @@ namespace SchoolManagement.Domain.Entities
             Email = newEmail.Trim();
             UpdateMetadata(modifiedBy);
         }
+
+        public void ChangeDepartment(Guid newDepartmentId)
+        {
+            if (newDepartmentId == Guid.Empty)
+                throw new ArgumentException("Invalid department Id");
+
+            DepartmentId = newDepartmentId;
+        }
+
         public void UpdateFullName(string firstName, string lastName, string? modifiedBy = null)
         {
             if(string.IsNullOrWhiteSpace(firstName))

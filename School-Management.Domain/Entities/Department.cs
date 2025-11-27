@@ -6,7 +6,7 @@ namespace School_Management.Domain.Entities
     public class Department : BaseEntity
     {
         private Department() { }
-
+          
         private Department(string departmentCode, string departmentName)
         {
             DepartmentCode = departmentCode ?? throw new ArgumentNullException(nameof(departmentCode));
@@ -19,6 +19,7 @@ namespace School_Management.Domain.Entities
         public string DepartmentName { get; private set; } = default!;
         public ICollection<Teacher> Teachers { get; private set; } = new List<Teacher>();
         public ICollection<Student> Students { get; private set; } = new List<Student>();
+        public ICollection<Classroom> Classrooms { get; private set; } = new List<Classroom>();
 
         public static Department Create(string departmentCode, string departmentName, string createdBy = null)
         {

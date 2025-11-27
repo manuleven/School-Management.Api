@@ -28,6 +28,11 @@ namespace School_Management.Persistence.Repositories
             return await dbContext.Departments.FirstOrDefaultAsync(t => t.Id ==id);
         }
 
+        public async Task<Department> GetByName(string department, CancellationToken cancellationToken)
+        {
+            return await dbContext.Departments.FirstOrDefaultAsync(t => t.DepartmentName == department, cancellationToken);
+        }
+
         public async Task<IEnumerable<Department>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await dbContext.Departments.ToListAsync(cancellationToken);

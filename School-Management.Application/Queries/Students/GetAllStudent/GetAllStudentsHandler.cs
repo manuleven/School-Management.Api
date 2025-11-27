@@ -9,31 +9,27 @@ using System.Threading.Tasks;
 
 namespace School_Management.Application.Queries.Students.GetAllStudent
 {
-    public class GetAllStudentsHandler(IUnitOfWork repository) : IRequestHandler<GetAllStudentsQuery, List<StudentDto>>
+    public class GetAllStudentsHandler(IUnitOfWork repository) : IRequestHandler<GetAllStudentsQuery, IEnumerable<StudentDto>>
     {
-        public async Task<List<StudentDto>> Handle(GetAllStudentsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<StudentDto>> Handle(GetAllStudentsQuery request, CancellationToken cancellationToken)
         {
             var students = await repository.Students.GetAllAsync(cancellationToken);
-            var studentDtos = new List<StudentDto>();
-            foreach (var student in students)
+            if (students == null || students.Count() == 0)
+                throw new ArgumentException("No student found");
+
+            return students.Select(student => new StudentDto
             {
-                var department = await repository.Departments.GetByIdAsync(student.DepartmentId, cancellationToken);
-                var studentDto = new StudentDto
-                {
-                    Id = student.Id,
-                    FullName = student.FullName.GetFullName(),
-                    DateOfBirth = student.DateOfBirth,
-                    PhoneNumber = student.PhoneNumber,
-                    State = student.State,
-                    Address = student.Address,
-                    Age = student.Age,
-                    DateOfEnrollment = student.DateOfEnrollment,
-                    Department = department?.DepartmentName,
-                    CreatedBy = student.CreatedBy
-                };
-                studentDtos.Add(studentDto);
-            }
-            return studentDtos;
+                Id = student.Id,
+                FullName = student.FullName.GetFullName(),
+                State = student.State,
+                Address = student.Address,
+                Age = student.Age,
+                PhoneNumber = student.PhoneNumber,
+                DateOfBirth = student.DateOfBirth,
+                DateOfEnrollment = student.DateOfEnrollment,
+                Department = student.Department.DepartmentName
+
+            }).ToList();
         }
     
     }

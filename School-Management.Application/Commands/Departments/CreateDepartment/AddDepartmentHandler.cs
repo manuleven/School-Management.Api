@@ -9,7 +9,15 @@ namespace School_Management.Application.Commands.Departments.CreateDepartment
     {
         public async Task<DepartmentDto> Handle(AddDepartmentCommand request, CancellationToken cancellationToken)
         {
+            var check = await unitOfWork.Departments.GetByName(request.DepartmentName.ToLower(), cancellationToken);
+            if (check != null)
+            {
+                
+                throw new Exception("Department already exists.");
+            }
+
             var dept = Department.Create(request.DepartmentCode, request.DepartmentName, request.CreatedBy);
+           
 
             await unitOfWork.Departments.AddAsync(dept, cancellationToken);
             await unitOfWork.SaveChangesAsync();

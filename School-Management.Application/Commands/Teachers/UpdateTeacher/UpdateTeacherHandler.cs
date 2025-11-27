@@ -9,14 +9,24 @@ namespace School_Management.Application.Commands.Teachers.UpdateTeacher
         public async Task<TeacherDto> Handle(UpdateTeacherCommand request, CancellationToken cancellationToken)
         {
             var teacher = await repository.Teachers.GetByIdAsync(request.Id, cancellationToken);
-            var department = await repository.Departments.GetByIdAsync(request.DepartmentId, cancellationToken);
+            
 
             if (teacher == null)
                 throw new Exception("teacher not found");
-           teacher.UpdateFullName(request.FirstName, request.LastName);
+
+            // 2. CHECK NEW DEPARTMENT BY NAME
+            var newDepartment = await repository.Departments.GetByName(
+                request.Department.ToLower().Trim(),
+                cancellationToken
+            );
+
+            teacher.UpdateFullName(request.FirstName, request.LastName);
            teacher.UpdateEmail(request.Email);
             teacher.ChangePhoneNumber(request.PhoneNumber);
-            department.UpdateDepartmentName(request.Department);
+            teacher.ChangeDepartment(request.DepartmentId);
+            
+
+           
 
             await repository.Teachers.UpdateAsync(teacher, cancellationToken);
             await repository.SaveChangesAsync(cancellationToken);
@@ -27,7 +37,7 @@ namespace School_Management.Application.Commands.Teachers.UpdateTeacher
                 FullName = teacher.FullName.GetFullName(),
                 Email = teacher.Email,
                 PhoneNumber = teacher.PhoneNumber,
-                Department = department.DepartmentName,
+                Department = newDepartment.DepartmentName,
                 HireDate = teacher.HireDate,
                 IsActive = teacher.IsActive
             };

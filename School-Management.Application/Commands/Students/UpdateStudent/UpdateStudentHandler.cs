@@ -14,12 +14,13 @@ namespace School_Management.Application.Commands.Students.UpdateStudent
         public async Task<bool> Handle(UpdateStudentCommand command, CancellationToken cancellationToken)
         {
             var student = await repository.Students.GetByIdAsync(command.Id, cancellationToken);
-            var department = await repository.Departments.GetByIdAsync(command.DepartmentId, cancellationToken);
+           
             if (student == null)
                 throw new Exception("Student not found");
 
-            if (department == null)
-                throw new Exception("Department not found");
+            var newDepartment = await repository.Departments.GetByName(command.Department, cancellationToken);
+            if (newDepartment == null)
+                throw new Exception("Department doesnt exist");
 
             student.UpdateFullName(command.FirstName, command.LastName);
                 student.ChangePhoneNumber(command.PhoneNumber);
@@ -27,7 +28,7 @@ namespace School_Management.Application.Commands.Students.UpdateStudent
                 student.UpdateDob(command.DateOfBirth);
                 student.UpdateState(command.State);
 
-                department.UpdateDepartmentName(command.Department);
+                student.ChangeDepartment(command.DepartmentId);
 
                 await repository.Students.UpdateAsync(student, cancellationToken);
                

@@ -24,12 +24,12 @@ namespace School_Management.Application.Queries.Students.GetStudentById
             {
                 Id = student.Id,
                 FullName = student.FullName.GetFullName(),
-                
+                DateOfEnrollment = student.DateOfEnrollment,
                 DateOfBirth = student.DateOfBirth,
                 PhoneNumber = student.PhoneNumber,
                 Address = student.Address,
                 State = student.State,
-                
+                Age = student.Age,
                 Department = department.DepartmentName
             };
             return studentDto;

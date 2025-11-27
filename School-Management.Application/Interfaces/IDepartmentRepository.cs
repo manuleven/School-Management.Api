@@ -14,5 +14,7 @@ namespace School_Management.Application.Interfaces
         Task<Department> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task<IEnumerable<Department>> GetAllAsync(CancellationToken cancellationToken);
         Task DeleteAsync(Department department, CancellationToken cancellationToken);
+
+        Task<Department> GetByName(string department, CancellationToken cancellationToken);
     }
 }

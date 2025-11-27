@@ -28,7 +28,10 @@ namespace SchoolManagement.Persistence.Repositories
 
         public async Task <IEnumerable<Teacher>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await dbContext.Teachers.Include(x => x.Department).ToListAsync(cancellationToken);
+            return await dbContext.Teachers
+                .Include(x => x.Department)
+                
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<Teacher> GetByIdAsync(Guid id, CancellationToken cancellationToken)

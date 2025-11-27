@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace School_Management.Application.Commands.Departments.UpdateDepartment
 {
-    public record UpdateDepartmentCommand(Guid Id, string DepartmentCode,string Departmentname, string modifiedby) : IRequest<bool>;
+    public record UpdateDepartmentCommand(Guid Id, string DepartmentCode,string DepartmentName, string ModifiedBy) : IRequest<bool>;
    
 }

@@ -16,12 +16,15 @@ namespace School_Management.Application.Queries.Teachers.GetAllTeachers
         public async Task<IEnumerable<TeacherDto>> Handle(GetAllTeachersQuery request, CancellationToken cancellationToken)
         {
             var teachers = await repository.Teachers.GetAllAsync(cancellationToken);
+            if (teachers == null || teachers.Count() == 0)
+                throw new ArgumentException("No teachers found");
+
             return teachers.Select(teacher => new TeacherDto
             {
                 Id = teacher.Id,
                 FullName = teacher.FullName.GetFullName(),
                 PhoneNumber = teacher.PhoneNumber,
-                Department = teacher.Department.CreatedBy,
+                Department = teacher.Department.DepartmentName,
                 HireDate = teacher.HireDate,
                 IsActive = teacher.IsActive,
             }).ToList();

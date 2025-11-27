@@ -34,6 +34,8 @@ namespace School_Management.Api.Controllers
             return Ok(result);
 
         }
+
+
         [HttpGet("get-all")]
         public async Task<ActionResult<IEnumerable<StudentDto>>> GetAllStudent(CancellationToken cancellationToken)
         {
@@ -63,7 +65,7 @@ namespace School_Management.Api.Controllers
             if(!result)
                 return NotFound($"Student with {Id} not found");
 
-            return Ok($"Student with {Id} deleted successfully");
+            return NoContent();
         }
     }
 }

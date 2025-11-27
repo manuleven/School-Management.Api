@@ -34,7 +34,9 @@ namespace School_Management.Domain.Entities
         public string PhoneNumber { get; private set; } = default!;
 
         public Department Department { get; private set; } = default!;
+        public Classroom Classroom { get; private set; } = default!;
 
+        public Guid ClassroomId { get; private set; } = default!;
         public Guid DepartmentId { get; private set; } = default!;
 
         public string State { get; private set; } = default!;
@@ -88,6 +90,15 @@ namespace School_Management.Domain.Entities
             Address = address.Trim();
             UpdateMetadata(modifiedBy);
         }
+
+        public void ChangeDepartment(Guid newDepartmentId)
+        {
+            if (newDepartmentId == Guid.Empty)
+                throw new ArgumentException("Invalid department Id");
+
+            DepartmentId = newDepartmentId;
+        }
+
 
         public void UpdateDob(DateTime newDob, string? modifiedBy = null)
         {

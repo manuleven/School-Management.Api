@@ -17,7 +17,7 @@ namespace School_Management.Api.Controllers
         public async Task <ActionResult<DepartmentDto>> CreateDepartment([FromBody]AddDepartmentCommand command)
         {
             var dept = await mediator.Send(command);
-            return Ok(command);
+            return Ok(dept);
         }
 
         [HttpGet("department-by-id")]
