@@ -10,5 +10,9 @@ namespace School_Management.Persistence.Repositories
         Task<IEnumerable<Classroom>> GetAllAsync(CancellationToken cancellationToken);
         Task<Classroom> GetClassroomById(Guid id, CancellationToken cancellationToken);
         Task<bool> UpdateAsync(Classroom classroom, CancellationToken cancellationToken);
+
+        Task<List<Classroom>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken);
+
     }
+
 }

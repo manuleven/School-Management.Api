@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace School_Management.Application.Commands.Departments.DeleteDepartment
 {
-    public class DeleteDepartmentHandler(IUnitOfWork repository) : IRequestHandler<DeleteTeacherCommand, bool>
+    public class DeleteDepartmentHandler(IUnitOfWork repository) : IRequestHandler<DeleteDepartmentCommand, bool>
     {
-        public async Task<bool> Handle(DeleteTeacherCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
         {
             var department = await repository.Departments.GetByIdAsync(request.Id, cancellationToken);
 

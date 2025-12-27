@@ -16,7 +16,7 @@ namespace School_Management.Api.Controllers
     public class TeacherController(IMediator mediator) : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<ActionResult<TeacherDto>> RegisterTeacher([FromBody] RegisterTeacherCommand command)
+        public async Task<IActionResult> RegisterTeacher([FromBody] RegisterTeacherCommand command)
         {
             var result = await mediator.Send(command);
             return Ok(result);
@@ -24,7 +24,7 @@ namespace School_Management.Api.Controllers
 
         [HttpPut("update")]
 
-        public async Task<ActionResult<TeacherDto>> UpdateTeacher([FromBody] UpdateTeacherCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateTeacher([FromBody] UpdateTeacherCommand request, CancellationToken cancellationToken)
         {
             var result = await mediator.Send(request, cancellationToken);
             return Ok(result);
@@ -33,7 +33,7 @@ namespace School_Management.Api.Controllers
 
         [HttpGet("get-by-id{id:guid}")]
 
-        public async Task<ActionResult<TeacherDto>> GetTeacherById(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetTeacherById(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetTeacherByIdQuery(id);
             var result = await mediator.Send(query, cancellationToken);
@@ -48,12 +48,12 @@ namespace School_Management.Api.Controllers
         }
 
         [HttpGet("get-all")]
-        public async Task<ActionResult<IEnumerable<TeacherDto>>> GetAllTeachers(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllTeachers(CancellationToken cancellationToken)
         {
             var query = new GetAllTeachersQuery();
             var result = await mediator.Send(query, cancellationToken);
 
-            if (result.Count()> 0)
+            if (result.Count()< 0)
             { 
 
                 return NotFound();
@@ -64,7 +64,7 @@ namespace School_Management.Api.Controllers
 
         [HttpDelete("{id:guid}")]
 
-        public async Task<ActionResult<bool>> DeleteTeacher(Guid id)
+        public async Task<IActionResult> DeleteTeacher(Guid id)
         {
             var result = await mediator.Send(new DeleteTeacherCommand(id));
 

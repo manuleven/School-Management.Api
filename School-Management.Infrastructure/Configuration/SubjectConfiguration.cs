@@ -15,13 +15,20 @@ namespace School_Management.Infrastructure.Configuration
         {
             builder.HasKey(s => s.Id);
 
-            builder.Property(s => s.Name)
-                .IsRequired()
-                .HasMaxLength(100);
+            builder.OwnsOne(s => s.Name, n =>
+            {
+                n.Property(p => p.Value)
+                 
+                 .HasMaxLength(100)
+                 .IsRequired();
+            });
 
 
             builder.Property(s => s.Description)
                 .IsRequired();
+
+            
+
         }
     }
 }

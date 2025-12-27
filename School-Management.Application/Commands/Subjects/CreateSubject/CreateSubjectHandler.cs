@@ -16,8 +16,14 @@ namespace School_Management.Application.Commands.Subjects.CreateSubject
     {
         public async Task<SubjectDto> Handle(CreateSubjectCommand request, CancellationToken cancellationToken)
         {
+            var check = await repository.Subjects.GetSubjectByName(request.Name, cancellationToken);
+
+            if (check != null)
+                throw new Exception("Subject already exist");
+
+
             var name = SubjectName.Create(request.Name);
-            var subject = Subject.Create(name, request.Description, request.Code, request.DepartmentId, request.CreatedBy);
+            var subject = Subject.Create(name, request.Description, request.Code, request.CreatedBy);
 
             await repository.Subjects.AddAsync(subject, cancellationToken);
             var result = await repository.SaveChangesAsync(cancellationToken);
@@ -30,8 +36,9 @@ namespace School_Management.Application.Commands.Subjects.CreateSubject
             {
                 Description = subject.Description,
                 Code = subject.Code,
-                DepartmentId = subject.DepartmentId,
-                DepartmentName = subject.Department?.DepartmentName,
+                Name = subject.Name.Value
+                
+               
             };
         }
     }

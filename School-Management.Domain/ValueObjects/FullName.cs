@@ -17,7 +17,7 @@
                 throw new ArgumentNullException("last name is required.", nameof(lastName));
 
             FirstName = firstName.Trim();
-            FirstName = lastName.Trim();
+            LastName = lastName.Trim();
         }
 
         public static FullName Create(string firstName, string lastName)

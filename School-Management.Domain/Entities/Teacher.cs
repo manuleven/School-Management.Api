@@ -13,12 +13,13 @@ namespace SchoolManagement.Domain.Entities
     {
         private Teacher() { }   
 
-        private Teacher(FullName fullName, string email, string phoneNumber, Guid departmentId, string createdBy = null)
+        private Teacher(FullName fullName, string email, string phoneNumber, Guid subjectId, Guid? departmentId = null, string createdBy = null)
         {
             FullName = fullName ?? throw new ArgumentNullException(nameof(fullName));
             Email = email ?? throw new ArgumentNullException(nameof(email));
             PhoneNumber = phoneNumber ?? throw new ArgumentNullException( nameof(phoneNumber));
             DepartmentId = departmentId;
+            SubjectId = subjectId;
             HireDate = DateTime.UtcNow;
         }
 
@@ -28,27 +29,59 @@ namespace SchoolManagement.Domain.Entities
 
         public string PhoneNumber { get; private set; } = default!;
 
-        public Department Department { get; private set;} = default!;
+        public Department? Department { get; private set;} = default!;
         public List<Classroom> Classrooms { get; private set; } = new();
 
-        public List<Subject> Subjects { get; private set; } = new();
 
-        public Guid DepartmentId { get; private set; } = default!;
+        public Guid SubjectId { get; private set; } = default!;
+        
+        public Subject Subject { get; private set; } = default!;
+
+        public Guid? DepartmentId { get; private set; } = default!;
 
         public DateTime HireDate { get; private set; }
 
         public bool IsActive { get; private set; } = true;
 
-        public static Teacher Create(FullName fullName, string email, string phoneNumber, Guid departmentId, string? createdBy = null)
+        public static Teacher Create(FullName fullName, string email, string phoneNumber,Guid subjectId, Guid? departmentId = null, string? createdBy = null)
         {
             Validate(email, phoneNumber);
 
-            var teacher = new Teacher(fullName, email.Trim(), phoneNumber.Trim(), departmentId);
+            var teacher = new Teacher(fullName, email.Trim(), phoneNumber.Trim(), subjectId, departmentId );
            teacher.CreatedBy = createdBy;
             return teacher;
         }
 
-      
+      public void UpdateClassrooms(List<Classroom> newClassrooms, string ? modifiedBy = null)
+        {
+            if (newClassrooms == null)
+                throw new ArgumentNullException(nameof(newClassrooms));
+
+            if (DepartmentId.HasValue)
+            {
+                if (newClassrooms.Any(c => c.DepartmentId != DepartmentId))
+                    throw new Exception("Teacher cannot teach classrooms from another department");
+            }
+
+            var toRemove = Classrooms.Where(c => !newClassrooms
+            .Any(n => n.Id == c.Id))
+                .ToList();
+
+            foreach (var classroom in toRemove)
+                Classrooms.Remove(classroom);
+
+            var toAdd = newClassrooms
+                .Where(n => !Classrooms.Any(c => c.Id == n.Id))
+                .ToList();
+
+            foreach (var classroom in toAdd)
+                Classrooms.Add(classroom);
+
+            UpdateMetadata(modifiedBy);
+        }
+
+   
+
 
         public void ChangePhoneNumber(string phoneNumber, string? modifiedBy = null)
         {
@@ -67,12 +100,22 @@ namespace SchoolManagement.Domain.Entities
             UpdateMetadata(modifiedBy);
         }
 
-        public void ChangeDepartment(Guid newDepartmentId)
+        public void ChangeDepartment(Guid? newDepartmentId, string? modifiedBy = null)
         {
             if (newDepartmentId == Guid.Empty)
                 throw new ArgumentException("Invalid department Id");
 
             DepartmentId = newDepartmentId;
+            UpdateMetadata(modifiedBy);
+        }
+        public void ChangeSubject(Guid newSubjectId, string? modifiedBy = null)
+        {
+            if (newSubjectId == Guid.Empty)
+                throw new ArgumentException("Invalid department Id");
+
+            SubjectId = newSubjectId;
+            UpdateMetadata(modifiedBy);
+
         }
 
         public void UpdateFullName(string firstName, string lastName, string? modifiedBy = null)

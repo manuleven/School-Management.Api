@@ -1,4 +1,5 @@
-﻿using SchoolManagement.Domain.Entities;
+﻿using School_Management.Domain.ValueObjects;
+using SchoolManagement.Domain.Entities;
 using SchoolManagement.Domain.Utilities;
 
 namespace School_Management.Domain.Entities
@@ -7,29 +8,52 @@ namespace School_Management.Domain.Entities
     {
         private Department() { }
           
-        private Department(string departmentCode, string departmentName)
+        private Department(string departmentCode, string departmentName, List<SubjectName>subjects, string createdBy = null)
         {
             DepartmentCode = departmentCode ?? throw new ArgumentNullException(nameof(departmentCode));
-            CreatedBy = departmentCode ?? throw new ArgumentNullException(nameof(departmentName));
+            DepartmentName = departmentName ?? throw new ArgumentNullException(nameof(departmentName));
+            SubjectTaken = subjects ?? new ();
+            CreatedBy =  createdBy;
         }
 
         public string DepartmentCode { get; private set; } = default!;
-        public string CreatedBy { get; private set; } = default!;
+      
 
         public string DepartmentName { get; private set; } = default!;
         public ICollection<Teacher> Teachers { get; private set; } = new List<Teacher>();
+        public List<SubjectName> SubjectTaken { get; private set; } = new();
         public ICollection<Student> Students { get; private set; } = new List<Student>();
         public ICollection<Classroom> Classrooms { get; private set; } = new List<Classroom>();
 
-        public static Department Create(string departmentCode, string departmentName, string createdBy = null)
+        public static Department Create(string departmentCode, string departmentName, List <SubjectName>subjectNames, string createdBy = null)
         {
             ValidateInputs(departmentCode, departmentName);
 
-            var department = new Department(departmentCode.Trim(), departmentName.Trim());
+            var department = new Department(departmentCode.Trim(), departmentName.Trim(), subjectNames);
             department.UpdateMetadata(createdBy);
             return department;
         }
 
+        public void AddSubjectTaken(SubjectName subjectName)
+        {
+            if(SubjectTaken == null)
+                throw new ArgumentNullException(nameof(subjectName));
+            
+
+            if (!SubjectTaken.Any(s => s.Value.Equals(subjectName.Value, StringComparison.OrdinalIgnoreCase)))
+
+                if (SubjectTaken.Count() < 7 || SubjectTaken.Count() > 9)
+                    throw new Exception("Department must have 8–9 subjects.");
+
+            SubjectTaken.Add(subjectName);
+
+
+        }
+
+        public bool IsSubjectAllowed(SubjectName subjectName)
+        {
+            return SubjectTaken.Any(s => s.Value.Equals(subjectName.Value, StringComparison.OrdinalIgnoreCase));
+        }
         public void UpdateDepartmentName(string newName,string modifiedBy = null)
         {
             if (string.IsNullOrEmpty(newName))
@@ -53,6 +77,21 @@ namespace School_Management.Domain.Entities
                 throw new ArgumentException("Department code must be between and 20 characters.", nameof(newCode));
 
             DepartmentCode = newCode.Trim();
+            UpdateMetadata(modifiedBy);
+        }
+
+        public void UpdateSubjectTaken(IEnumerable<SubjectName> subjects, string modifiedBy = null)
+        {
+             if (subjects == null || !subjects.Any())
+                    throw new ArgumentException("At least one subject must be selected.");
+
+            if (subjects.Count() < 8 || subjects.Count() > 9)
+                throw new Exception("Department must have 8–9 subjects.");
+
+
+            SubjectTaken.Clear();
+            SubjectTaken.AddRange(subjects);
+
             UpdateMetadata(modifiedBy);
         }
 

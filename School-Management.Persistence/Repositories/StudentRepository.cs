@@ -25,18 +25,26 @@ namespace School_Management.Persistence.Repositories
 
         public async Task<IEnumerable<Student>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await dbContext.Students.Include(x => x.Department).ToListAsync(cancellationToken);
+            return await dbContext.Students
+                .Include(x => x.Classroom)
+                .ThenInclude(x => x.Department)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<Student> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await dbContext.Students.Include(x => x.Department).FirstOrDefaultAsync(t => t.Id == id);
+            return await dbContext.Students
+                .Include(x => x.Classroom)
+                .ThenInclude(x => x.Subjects)
+                .Include(x => x.Classroom)
+                .ThenInclude(x => x.Department)
+                .FirstOrDefaultAsync(t => t.Id == id);
 
         }
 
         public async Task UpdateAsync(Student student, CancellationToken cancellationToken)
         {
-            var check = await dbContext.Teachers.FirstOrDefaultAsync(t => t.Id == student.Id);
+            var check = await dbContext.Students.FirstOrDefaultAsync(t => t.Id == student.Id);
             if (check != null)
             {
                 dbContext.Update(student);

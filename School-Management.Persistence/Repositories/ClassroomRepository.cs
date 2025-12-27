@@ -24,13 +24,33 @@ namespace School_Management.Persistence.Repositories
 
         public async Task<IEnumerable<Classroom>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await dbContext.Classrooms.Include(x => x.Department).ToListAsync(cancellationToken);
+            return await dbContext.Classrooms
+                .Include(x => x.Teachers)
+                .Include(x => x.Students)
+                .Include(x => x.Subjects)
+                .Include(x => x.Department).ToListAsync(cancellationToken);
         }
 
         public async Task<Classroom> GetClassroomById(Guid id, CancellationToken cancellationToken)
         {
-            return await dbContext.Classrooms.Include(x => x.Department).FirstOrDefaultAsync(c => c.Id == id);
+            return await dbContext.Classrooms
+                .Include(x => x.Department)
+                .Include(x => x.Teachers)
+                .Include(x => x.Students)
+                .Include(x => x.Subjects)
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
+
+        public async Task<List<Classroom>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
+        {
+            return await dbContext.Classrooms
+                .Include(x => x.Department)
+                .Include(x => x.Teachers)
+                .Include(x => x.Students)
+                .Where(c => ids.Contains(c.Id))
+                .ToListAsync(cancellationToken);
+        }
+
 
         public async Task<bool> UpdateAsync(Classroom classroom, CancellationToken cancellationToken)
         {

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using School_Management.Application.DTO;
 using School_Management.Application.Interfaces;
 using SchoolManagement.Application.DTO;
 using SchoolManagement.Application.Interfaces;
@@ -24,7 +25,9 @@ namespace School_Management.Application.Queries.Teachers.GetTeacherById
                 FullName = teacher.FullName.GetFullName(),
                 Email = teacher.Email,
                 PhoneNumber = teacher.PhoneNumber,
-                Department = teacher.Department.DepartmentName,
+                Subject = teacher.Subject.Name.Value,
+                TeacherClassrooms = teacher.Classrooms.Select(c => c.Name).ToList(),
+                Department = teacher.Department?.DepartmentName,
                 HireDate = teacher.HireDate,
                 IsActive = teacher.IsActive,
 

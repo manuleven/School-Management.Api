@@ -8,7 +8,8 @@ namespace SchoolManagement.Application.Commands.Teachers.RegisterTeacher
         string LastName,
         string Email,
         string PhoneNumber,
-        Guid DepartmentId,
+        Guid? DepartmentId,
+        Guid SubjectId,
         string? CreatedBy= null
 
         ) : IRequest<TeacherDto>;

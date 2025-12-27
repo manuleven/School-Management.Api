@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using School_Management.Application.Interfaces;
+using School_Management.Domain.Entities;
 using SchoolManagement.Application.DTO;
 using SchoolManagement.Application.Interfaces;
 using SchoolManagement.Domain.Entities;
@@ -17,21 +18,40 @@ namespace SchoolManagement.Application.Commands.Teachers.RegisterTeacher
                 fullName,
                 request.Email,
                 request.PhoneNumber,
-                request.DepartmentId,
+                request.SubjectId,
+                 request.DepartmentId,
                 request.CreatedBy
 
                 );
 
+
+            Department? dept = null;
+
+            if (request.DepartmentId is Guid deptId)
+            {
+                dept = await teacherRepository.Departments.GetByIdAsync(deptId, cancellationToken);
+                if (dept is null)
+                    throw new Exception("Department with id not found");
+            }
+
+            var subject = await teacherRepository.Subjects.GetSubjectById(request.SubjectId, cancellationToken);
+                if(subject == null)
+                throw new ArgumentNullException("Subject with id not found");
+
+          
+
+
             await teacherRepository.Teachers.AddAsync(teacher, cancellationToken);
             await teacherRepository.SaveChangesAsync(cancellationToken);
-            var dept = await teacherRepository.Departments.GetByIdAsync(request.DepartmentId,cancellationToken);
+            
 
             return new TeacherDto
             {
                 Id = teacher.Id,
                 FullName = teacher.FullName.GetFullName(),
                 PhoneNumber = teacher.PhoneNumber,
-                Department= dept.DepartmentName,
+                Department= dept?.DepartmentName,
+                Subject= subject.Name.Value,
                 HireDate = teacher.HireDate,
                 IsActive = teacher.IsActive,
 

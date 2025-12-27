@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace School_Management.Application.Queries.Teachers.GetAllTeachers
 {
-    public record GetAllTeachersQuery() : IRequest<IEnumerable<TeacherDto>>;
+    public record GetAllTeachersQuery() : IRequest<List<TeacherDto>>;
    
 }

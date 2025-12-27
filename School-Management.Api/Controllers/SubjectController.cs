@@ -14,7 +14,7 @@ namespace School_Management.Api.Controllers
     public class SubjectController(IMediator mediator) : ControllerBase
     {
         [HttpPost("create-subject")]
-        public async Task<ActionResult> CreateSubject([FromBody] CreateSubjectCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateSubject([FromBody] CreateSubjectCommand command, CancellationToken cancellationToken)
         {
             var result = await mediator.Send(command, cancellationToken);
             return Ok(result);
@@ -22,7 +22,7 @@ namespace School_Management.Api.Controllers
 
         [HttpPut("update-subject")]
 
-        public async Task<ActionResult> UpdateSubject([FromBody] UpdateSubjectCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateSubject([FromBody] UpdateSubjectCommand command, CancellationToken cancellationToken)
         {
             var result = await mediator.Send(command, cancellationToken);
             return Ok(result);
@@ -30,7 +30,7 @@ namespace School_Management.Api.Controllers
 
         [HttpGet("get-all-subjects")]
 
-        public async Task <ActionResult<IEnumerable<SubjectDto>>> GetAllSubjects(CancellationToken cancellationToken)
+        public async Task <IActionResult> GetAllSubjects(CancellationToken cancellationToken)
         {
             var check = await mediator.Send(new GetAllSubjectsQuery(), cancellationToken);
             if (check.Any())
@@ -42,7 +42,7 @@ namespace School_Management.Api.Controllers
         }
 
         [HttpGet("get-subject-by-id")]
-        public async Task<ActionResult> GetSubjectById(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetSubjectById(Guid id, CancellationToken cancellationToken)
         {
             var check = await mediator.Send(new GetSubjectByIdQuery(id), cancellationToken);
            
@@ -54,7 +54,7 @@ namespace School_Management.Api.Controllers
         }
 
         [HttpDelete("delete-subject")]
-        public async Task<ActionResult> DeleteSubject(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteSubject(Guid id, CancellationToken cancellationToken)
         {
            
             var result = await mediator.Send(new GetSubjectByIdQuery(id), cancellationToken);

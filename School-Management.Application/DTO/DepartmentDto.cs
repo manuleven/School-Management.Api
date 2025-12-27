@@ -13,7 +13,8 @@ namespace School_Management.Application.DTO
         public Guid Id { get; set; }
 
         public string DepartmentCode { get;  set; } 
-        public string DepartmentName { get;  set; } 
+        public string DepartmentName { get;  set; }
+        public List<string> Subjects { get;  set; }
         public string CreatedBy { get;  set; } 
         
 

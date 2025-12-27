@@ -13,9 +13,7 @@ namespace School_Management.Application.DTO
 
         public string Code { get; set; }
 
-        public Guid DepartmentId { get; set; } 
-
-        public string DepartmentName { get;  set; }
+      
 
     }
 }

@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace School_Management.Application.Commands.Departments.CreateDepartment
 {
-    public record AddDepartmentCommand(string DepartmentCode, string DepartmentName, string CreatedBy) : IRequest<DepartmentDto>;
+    public record AddDepartmentCommand(string DepartmentCode, string DepartmentName, List<Guid> Subjects, string? CreatedBy) : IRequest<DepartmentDto>;
 }

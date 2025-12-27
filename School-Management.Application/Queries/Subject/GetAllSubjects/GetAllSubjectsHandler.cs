@@ -18,12 +18,12 @@ namespace School_Management.Application.Queries.Subject.GetAllSubjects
 
             var result = subjects.Select(subjects=> new SubjectDto
             {
+
                 
                 Name = subjects.Name.Value,
                 Code = subjects.Code,
-                Description = subjects.Description,
-                DepartmentId = subjects.DepartmentId,
-                DepartmentName = subjects.Department?.DepartmentName ?? string.Empty
+                Description = subjects.Description
+              
             });
 
             return result;

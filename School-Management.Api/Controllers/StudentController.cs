@@ -18,7 +18,7 @@ namespace School_Management.Api.Controllers
         public async Task<ActionResult> CreateStudent([FromBody]AddStudentCommand studentCommand)
         {
             var result = await mediator.Send(studentCommand);
-            return Ok(studentCommand);
+            return Ok(result);
         }
 
         [HttpGet("get-student")]
@@ -39,9 +39,8 @@ namespace School_Management.Api.Controllers
         [HttpGet("get-all")]
         public async Task<ActionResult<IEnumerable<StudentDto>>> GetAllStudent(CancellationToken cancellationToken)
         {
-            var query = new GetAllStudentsQuery();
-
-            var result = await mediator.Send(query, cancellationToken);
+           
+            var result = await mediator.Send(new GetAllStudentsQuery(), cancellationToken);
 
             if(result.Count() == 0)
                 return NotFound($"No student not found");

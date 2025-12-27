@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using School_Management.Application.Commands.AssignSubjectsToClassroom;
 using School_Management.Application.Commands.Departments.CreateDepartment;
 using School_Management.Application.Commands.Departments.DeleteDepartment;
 using School_Management.Application.Commands.Departments.UpdateDepartment;
@@ -14,14 +15,21 @@ namespace School_Management.Api.Controllers
     public class DepartmentController(IMediator mediator) : ControllerBase
     {
         [HttpPost("create-department")]
-        public async Task <ActionResult<DepartmentDto>> CreateDepartment([FromBody]AddDepartmentCommand command)
+        public async Task <IActionResult> CreateDepartment([FromBody]AddDepartmentCommand command)
         {
             var dept = await mediator.Send(command);
             return Ok(dept);
         }
 
+        //[HttpPost("assign-subject")]
+        //public async Task <IActionResult> AssignSubject([FromBody]AssignSubjectToClassroomCommand command)
+        //{
+        //    var subjects = await mediator.Send(command);
+        //    return Ok(subjects);
+        //}
+
         [HttpGet("department-by-id")]
-        public async Task<ActionResult<DepartmentDto>> GetById(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetDepartmentByIdQuery(id);
             var result = await mediator.Send(query, cancellationToken);
@@ -36,7 +44,7 @@ namespace School_Management.Api.Controllers
 
         [HttpGet("all-departments")]
 
-        public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAllDepartments(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllDepartments(CancellationToken cancellationToken)
         {
             var query = new GetAllDepartmentsQuery();
             var result = await mediator.Send(query, cancellationToken);
@@ -48,7 +56,7 @@ namespace School_Management.Api.Controllers
         }
 
         [HttpPut("update-department")]
-        public async Task<ActionResult<bool>> UpdateDepartment([FromBody] UpdateDepartmentCommand command)
+        public async Task<IActionResult> UpdateDepartment([FromBody] UpdateDepartmentCommand command)
         {
             var result = await mediator.Send(command);
             return Ok(result);                                                                                        
@@ -56,7 +64,7 @@ namespace School_Management.Api.Controllers
 
         [HttpDelete("delete-department")]
 
-        public async Task <ActionResult<bool>> DeleteDepartment(Guid id)
+        public async Task <IActionResult> DeleteDepartment(Guid id)
         {
             var result = await mediator.Send(new DeleteDepartmentCommand(id));
 

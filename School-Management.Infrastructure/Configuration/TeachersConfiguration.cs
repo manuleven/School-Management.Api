@@ -14,30 +14,38 @@ namespace School_Management.Infrastructure.Configuration
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(x => x.Department)
-                .IsRequired()
-                .HasMaxLength(100);
 
             builder.OwnsOne(t => t.FullName, fn =>
             {
                 fn.Property(f => f.FirstName)
                   .HasMaxLength(50)
                   .IsRequired();
-                
+
                 fn.Property(f => f.LastName)
                   .HasMaxLength(50)
                   .IsRequired();
 
-                builder.HasOne(t => t.Department)
-                       .WithMany(d => d.Teachers)
-                       .HasForeignKey(t => t.DepartmentId)
-                       .OnDelete(DeleteBehavior.Restrict);
-
-
-
             });
 
-           
+            builder.HasOne(t => t.Department)
+                      .WithMany(d => d.Teachers)
+                      .HasForeignKey(t => t.DepartmentId)
+                      .IsRequired(false)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(t => t.Subject)
+                   .WithMany(s => s.Teachers)
+                   .HasForeignKey(t => t.SubjectId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasMany(t => t.Classrooms)
+                .WithMany(c => c.Teachers);
+
+
+
+
+
         }
     }
 }

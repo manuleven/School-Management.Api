@@ -12,7 +12,7 @@ namespace School_Management.Domain.Entities
     {
         private Student() { }
 
-        private Student(FullName fullName, DateTime dateOfBirth, string phoneNumber, string state, string address, int age, Guid departmentId)
+        private Student(FullName fullName, DateTime dateOfBirth, string phoneNumber, string state, string address, int age, Guid classroomId, Guid? departmentId)
         {
             FullName = fullName ?? throw new ArgumentNullException(nameof(fullName));
             DateOfBirth = dateOfBirth;
@@ -25,6 +25,7 @@ namespace School_Management.Domain.Entities
 
             Age = age;
             DepartmentId = departmentId;
+            ClassroomId = classroomId;
         }
 
         public FullName FullName { get; private set; } = default!;
@@ -33,12 +34,13 @@ namespace School_Management.Domain.Entities
 
         public string PhoneNumber { get; private set; } = default!;
 
-        public Department Department { get; private set; } = default!;
+        public Department? Department { get; private set; } = default!;
         public Classroom Classroom { get; private set; } = default!;
 
         public Guid ClassroomId { get; private set; } = default!;
-        public Guid DepartmentId { get; private set; } = default!;
+        public Guid? DepartmentId { get; private set; } = default!;
 
+        public ICollection<Subject> Subjects { get; private set; } = new List<Subject>();   
         public string State { get; private set; } = default!;
 
         public string Address { get; private set; } = default!;
@@ -47,10 +49,10 @@ namespace School_Management.Domain.Entities
 
         public int Age { get; private set; } = default!;
 
-        public static Student Create(FullName fullName, DateTime dateOfBirth, string phoneNumber, string state, string address, int age, Guid departmentId, string? createdBy = null)
+        public static Student Create(FullName fullName, DateTime dateOfBirth, string phoneNumber, string state, string address, int age, Guid classroomId, Guid? departmentId = null,  string? createdBy = null)
         {
             Validate(phoneNumber);
-            var student = new Student(fullName, dateOfBirth, phoneNumber.Trim(), state.Trim(), address.Trim(), age, departmentId);
+            var student = new Student(fullName, dateOfBirth, phoneNumber.Trim(), state.Trim(), address.Trim(), age, classroomId, departmentId);
             student.CreatedBy = createdBy;
             return student;
         }
@@ -91,12 +93,19 @@ namespace School_Management.Domain.Entities
             UpdateMetadata(modifiedBy);
         }
 
-        public void ChangeDepartment(Guid newDepartmentId)
+        public void ChangeDepartment(Guid? newDepartmentId = null)
         {
             if (newDepartmentId == Guid.Empty)
                 throw new ArgumentException("Invalid department Id");
 
             DepartmentId = newDepartmentId;
+        }
+        public void ChangeClassroom(Guid newClassroomId)
+        {
+            if (newClassroomId == Guid.Empty)
+                throw new ArgumentException("Invalid classroom Id");
+
+            ClassroomId = newClassroomId;
         }
 
 

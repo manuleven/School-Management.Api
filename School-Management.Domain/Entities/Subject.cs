@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using School_Management.Domain.ValueObjects;
+using SchoolManagement.Domain.Entities;
 using SchoolManagement.Domain.Utilities;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,10 @@ namespace School_Management.Domain.Entities
     {
         private Subject() { }
 
-        private Subject(SubjectName name, string description, string code,Guid departmentId)
+        private Subject(SubjectName name, string description, string code)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Description = description ?? throw new ArgumentNullException(nameof(description));
-            DepartmentId = departmentId;
             Code = code ?? throw new ArgumentNullException(nameof(name));
         }
 
@@ -27,14 +27,19 @@ namespace School_Management.Domain.Entities
 
         public string Code { get; private set; } = default!;
 
-        public Guid DepartmentId { get; private set; } = default!;
+       
 
-        public Department Department { get; private set; } = default!;
+        public List<Teacher> Teachers { get; private set; } = new();
+        public List<Department> Departments { get; private set; } = new();
+        
 
-        public static Subject Create(SubjectName name, string description, string code, Guid departmentId, string ? createdBy= null)
+
+       
+
+        public static Subject Create(SubjectName name, string description, string code, string ? createdBy= null)
         {
             Validate(name, description, code);
-            var newSubject = new Subject(name, description, code, departmentId);
+            var newSubject = new Subject(name, description, code);
             newSubject.CreatedBy= createdBy;
             return newSubject;
         }
@@ -66,11 +71,7 @@ namespace School_Management.Domain.Entities
             UpdateMetadata (modifiedBy);
         }
 
-        public void ChangeDepartment(Guid departmentId, string ? modifiedBy = null)
-        {
-            DepartmentId = departmentId;
-            UpdateMetadata (modifiedBy);
-        }
+      
 
         public static void Validate(SubjectName name, string description, string code)
         {

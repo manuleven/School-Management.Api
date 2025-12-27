@@ -7,7 +7,7 @@ namespace School_Management.Application.Commands.Classrooms.CreateClassroom
 {
     public class CreateClassroomHandler(IUnitOfWork repo) : IRequestHandler<CreateClassroomCommand, ClassroomDto>
     {
-        public async Task <ClassroomDto> Handle(CreateClassroomCommand command, CancellationToken cancellationToken)
+        public async Task<ClassroomDto> Handle(CreateClassroomCommand command, CancellationToken cancellationToken)
         {
             var check = await repo.Classrooms.ClassroomExistsAsync(command.Name, cancellationToken);
             if (check)
@@ -15,6 +15,7 @@ namespace School_Management.Application.Commands.Classrooms.CreateClassroom
                 throw new ApplicationException("Classroom with the same name already exists");
             }
 
+            
             var classroom = Classroom.Create(
                 command.Name,
                 command.Capacity,
@@ -25,14 +26,27 @@ namespace School_Management.Application.Commands.Classrooms.CreateClassroom
             await repo.Classrooms.AddAsync(classroom, cancellationToken);
             await repo.SaveChangesAsync(cancellationToken);
 
-            var dept = await repo.Departments.GetByIdAsync(command.DepartmentId, cancellationToken);
+            string? deptName = null;
+                 List<string> subjects = new();
+            if (command.DepartmentId.HasValue)
+            {
+                var dept = await repo.Departments.GetByIdAsync(command.DepartmentId.Value, cancellationToken);
 
+
+
+                if (dept != null)
+                {
+                     subjects = dept.SubjectTaken.Select(s => s.Value).ToList() ?? new List<string>();
+                    deptName = dept?.DepartmentName;
+                }
+            }
             return new ClassroomDto
             {
                 Name = classroom.Name,
                 Capacity = classroom.Capacity,
                 ClassId = classroom.Id,
-                DepartmentName = dept.DepartmentName
+                SubjectTaken = subjects,
+                DepartmentName = deptName
             };
 
         }

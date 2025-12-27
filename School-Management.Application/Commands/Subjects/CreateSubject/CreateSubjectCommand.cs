@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace School_Management.Application.Commands.Subjects.CreateSubject
 {
-    public record CreateSubjectCommand(string Name, string Code, string Description, Guid DepartmentId ,string? CreatedBy= null) :  IRequest<SubjectDto>;
+    public record CreateSubjectCommand(string Name, string Code, string Description,string? CreatedBy= null) :  IRequest<SubjectDto>;
     
 }

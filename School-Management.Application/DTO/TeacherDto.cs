@@ -19,6 +19,8 @@ namespace SchoolManagement.Application.DTO
         public string PhoneNumber { get; set; } = string.Empty;
 
         public string Department { get; set; } 
+        public string Subject { get; set; } 
+        public IEnumerable<string> TeacherClassrooms { get; set; } 
 
         public DateTime HireDate { get; set; }
 

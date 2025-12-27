@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace School_Management.Application.Commands.Classrooms.CreateClassroom
 {
-    public record CreateClassroomCommand(string Name, int Capacity, Guid DepartmentId, string? createdBy = null) : IRequest<ClassroomDto>;
+    public record CreateClassroomCommand(string Name, int Capacity, Guid? DepartmentId = null, string? createdBy = null) : IRequest<ClassroomDto>;
    
 }

@@ -21,9 +21,11 @@ namespace School_Management.Application.Queries.Departments.GetDepartmentById
 
             return new DepartmentDto
             {
+                Id = check.Id,
                 DepartmentCode = check.DepartmentCode,
                 DepartmentName = check.DepartmentName,
                 CreatedBy = check.CreatedBy,
+                Subjects = check.SubjectTaken.Select(c => c.Value).ToList(),
 
             };
 

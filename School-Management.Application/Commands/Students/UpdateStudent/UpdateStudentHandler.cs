@@ -1,11 +1,5 @@
 ﻿using MediatR;
-using School_Management.Application.DTO;
 using School_Management.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace School_Management.Application.Commands.Students.UpdateStudent
 {
@@ -18,17 +12,32 @@ namespace School_Management.Application.Commands.Students.UpdateStudent
             if (student == null)
                 throw new Exception("Student not found");
 
-            var newDepartment = await repository.Departments.GetByName(command.Department, cancellationToken);
-            if (newDepartment == null)
-                throw new Exception("Department doesnt exist");
+         
+
+            var newClassroom = await repository.Classrooms.GetClassroomById(command.ClassroomId, cancellationToken);
+            if (newClassroom == null)
+                throw new Exception("Classroom doesnt exist");
+
+            if (newClassroom.DepartmentId.HasValue)
+            {
+                var department = await repository.Departments.GetByIdAsync(newClassroom.DepartmentId.Value, cancellationToken);
+
+                if (department == null)
+                    throw new Exception("Department does not exist");
+
+                student.ChangeDepartment(newClassroom.DepartmentId.Value);
+            }
+
+
 
             student.UpdateFullName(command.FirstName, command.LastName);
                 student.ChangePhoneNumber(command.PhoneNumber);
                 student.UpdateAddress(command.Address);
+            student.ChangeClassroom(newClassroom.Id);
                 student.UpdateDob(command.DateOfBirth);
                 student.UpdateState(command.State);
 
-                student.ChangeDepartment(command.DepartmentId);
+              
 
                 await repository.Students.UpdateAsync(student, cancellationToken);
                

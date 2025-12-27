@@ -13,6 +13,8 @@ namespace School_Management.Application.Interfaces
 
         Task<Subject> GetSubjectById(Guid id, CancellationToken cancellationToken);
 
+        Task<List<Subject>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken);
+
         Task<IEnumerable<Subject>> GetAllSubjects(CancellationToken cancellationToken);
 
         Task<bool> UpdateAsync(Subject subject, CancellationToken cancellationToken);

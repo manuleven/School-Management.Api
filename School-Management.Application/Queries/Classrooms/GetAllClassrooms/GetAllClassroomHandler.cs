@@ -19,9 +19,12 @@ namespace School_Management.Application.Queries.Classrooms.GetAllClassrooms
 
             return check.Select(Classrooms => new ClassroomDto
             {
+                ClassId = Classrooms.Id,
                 Name = Classrooms.Name,
                 Capacity = Classrooms.Capacity,
-                DepartmentName = Classrooms.Department.DepartmentName,
+                DepartmentName = Classrooms.Department?.DepartmentName,
+                SubjectTaken = Classrooms.DepartmentId.HasValue ? Classrooms.Department!.SubjectTaken
+                .Select(s => s.Value).ToList() : Classrooms.Subjects.Select(s => s.Name.Value).ToList(),
 
             }).ToList();
 

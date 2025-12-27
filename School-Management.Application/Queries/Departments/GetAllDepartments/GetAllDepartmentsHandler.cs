@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore.Migrations;
 using School_Management.Application.DTO;
 using School_Management.Application.Interfaces;
+using SchoolManagement.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +23,15 @@ namespace School_Management.Application.Queries.Departments.GetAllDepartments
             {
                 DepartmentCode = Departments.DepartmentCode,
                 DepartmentName = Departments.DepartmentName,
+                Id = Departments.Id,
+                Subjects = Departments.SubjectTaken.Select(c => c.Value).ToList(),
+                CreatedBy = Departments.CreatedBy
             }).ToList();
         }
     }
 }
+
+
+//Add - Migration InitialCreate - Project School_Management.Persistence - StartupProject School_Management.Api
+//Update-Database -Project School_Management.Persistence -StartupProject School_Management.Api
+

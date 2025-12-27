@@ -17,7 +17,8 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-builder.Services.AddSqlServer<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSqlServer<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"),
+     b => b.MigrationsAssembly("School-Management.Persistence"));;
 
 builder.Services.AddMediatR(cfg =>
 {

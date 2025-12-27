@@ -14,10 +14,8 @@ namespace School_Management.Application.Commands.Students.UpdateStudent
         string PhoneNumber,
         string Address,
         DateTime DateOfBirth,
-        Guid DepartmentId,
-        string State,
-        string Department
-
+        Guid ClassroomId,
+        string State
         ) : IRequest<bool>;
 
 }

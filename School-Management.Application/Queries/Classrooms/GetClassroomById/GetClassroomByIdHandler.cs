@@ -20,7 +20,9 @@ namespace School_Management.Application.Queries.Classrooms.GetClassroomById
             {
                 Name = check.Name,
                 Capacity = check.Capacity,
-                DepartmentName = check.Department.DepartmentName,
+                ClassId = check.Id,
+                SubjectTaken = check.Department != null ? check.Department.SubjectTaken.Select(s => s.Value).ToList() : check.Subjects.Select(s => s.Name.Value).ToList(),
+                DepartmentName = check.Department?.DepartmentName,
             };
         }
     

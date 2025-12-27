@@ -8,7 +8,7 @@ namespace School_Management.Infrastructure.Configuration
     {
         public void Configure(EntityTypeBuilder<Classroom> builder)
         {
-            builder.HasKey(c => c.ClassId);
+            builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Name)
                 .HasMaxLength(200)
@@ -20,7 +20,10 @@ namespace School_Management.Infrastructure.Configuration
             builder.HasOne(c => c.Department)
                 .WithMany(c => c.Classrooms)
                 .HasForeignKey(c=>c.DepartmentId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            
 
 
         }

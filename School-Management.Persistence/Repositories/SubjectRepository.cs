@@ -21,6 +21,13 @@ namespace School_Management.Persistence.Repositories
             return await dbContext.Subjects.FirstOrDefaultAsync(s => s.Name.Value == name, cancellationToken);
         }
 
+        public async Task<List<Subject>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
+        {
+            return await dbContext.Subjects
+                .Where(c => ids.Contains(c.Id))
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<IEnumerable<Subject>> GetAllSubjects(CancellationToken cancellationToken)
         {
             return await dbContext.Subjects.ToListAsync(cancellationToken);
